@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather in <%= city %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-gradient-to-br from-indigo-500 via-blue-500 to-sky-400 min-h-screen flex items-center justify-center"
+  >
+    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full text-center">
+      <h1 class="text-3xl font-bold text-gray-800 mb-4">
+        🌍 Weather in <%= country %>, <%= city %>
+      </h1>
+
+      <% if (icon) { %>
+      <img
+        src="http://openweathermap.org/img/wn/<%= icon %>@2x.png"
+        alt="Weather Icon"
+        class="mx-auto mb-4"
+      />
+      <% } %>
+
+      <div class="grid grid-cols-2 gap-4 text-left text-gray-700 font-medium">
+        <p>🌡️ Temperature:</p>
+        <p><%= temp %>°C</p>
+        <p>🌤️ Condition:</p>
+        <p><%= cond %></p>
+        <p>💧 Humidity:</p>
+        <p><%= humidity %>%</p>
+        <p>🌬️ Wind Speed:</p>
+        <p><%= windSpeed %> m/s</p>
+        <p>👁️ Visibility:</p>
+        <p><%= visibility %> m</p>
+        <p>☁️ Cloudiness:</p>
+        <p><%= cloudiness %>%</p>
+        <p>🔽 Pressure:</p>
+        <p><%= pressure %> hPa</p>
+        <p>🌅 Sunrise:</p>
+        <p><%= sunrise %></p>
+        <p>🌇 Sunset:</p>
+        <p><%= sunset %></p>
+      </div>
+
+      <a
+        href="/"
+        class="inline-block mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+      >
+        🔄 Check Another City
+      </a>
+    </div>
+  </body>
+</html>
