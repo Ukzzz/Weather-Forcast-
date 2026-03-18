@@ -1,11 +1,12 @@
 const express = require("express");
+const path = require("path");
 const dotenv = require("dotenv");
 const connectDB = require("./db");
 const Weather = require("./model/weather");
 const weatherService = require("./services/weatherService");
 const cities = require("./config/cities.json");
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, ".env") });
 connectDB();
 
 const app = express();
