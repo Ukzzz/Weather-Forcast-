@@ -1,58 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>All Cities Weather</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body
-    class="bg-gradient-to-r from-blue-700 via-sky-600 to-indigo-700 min-h-screen p-8"
-  >
-    <h1
-      class="text-4xl text-white font-extrabold text-center mb-10 drop-shadow-lg"
-    >
-      🌍 Live Weather Dashboard
-    </h1>
+<%- include('partials/header', { title: 'Global Dashboard' }) %>
 
-    <div
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto"
-    >
-      <% weatherData.forEach(city => { %>
-      <div
-        class="bg-white/20 backdrop-blur-md rounded-2xl p-6 text-white shadow-xl border border-white/30 hover:scale-105 transition-all duration-300 ease-in-out"
-      >
-        <h2 class="text-2xl font-bold mb-2">
-          <%= city.city %>, <%= city.country %>
-        </h2>
-
-        <% if (city.icon) { %>
-        <img
-          src="http://openweathermap.org/img/wn/<%= city.icon %>@2x.png"
-          alt="weather icon"
-          class="mx-auto w-20 h-20 mb-4"
-        />
-        <% } %>
-
-        <div class="text-lg space-y-1">
-          <p>🌡️ <strong>Temperature:</strong> <%= city.temperature %>°C</p>
-          <p>🌤️ <strong>Condition:</strong> <%= city.condition %></p>
-          <p>💧 <strong>Humidity:</strong> <%= city.humidity %>%</p>
-          <p>🌬️ <strong>Wind Speed:</strong> <%= city.windSpeed %> m/s</p>
-          <p>👁️ <strong>Visibility:</strong> <%= city.visibility %> m</p>
-          <p>☁️ <strong>Cloudiness:</strong> <%= city.cloudiness %>%</p>
-          <p>🔽 <strong>Pressure:</strong> <%= city.pressure %> hPa</p>
+<div class="max-w-7xl mx-auto px-4 md:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 animate-fade-in-up">
+        <div>
+            <span class="inline-block px-3 py-1 rounded-full bg-premium-500/10 text-premium-400 text-[10px] font-black uppercase tracking-widest mb-3 border border-premium-500/20">
+                Live Data Feed
+            </span>
+            <h1 class="text-5xl md:text-6xl font-outfit font-black text-white">
+                Dashboard<span class="text-premium-400">.</span>
+            </h1>
+            <p class="text-slate-500 text-lg mt-2">Real-time weather metrics across major European cities.</p>
         </div>
-      </div>
-      <% }) %>
+        
+        <div class="flex items-center gap-4 bg-white/5 px-6 py-4 rounded-3xl border border-white/5 shadow-inner">
+            <div class="flex items-center gap-2">
+                <span class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                </span>
+                <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Connected</span>
+            </div>
+            <div class="w-px h-6 bg-white/10 mx-2"></div>
+            <div class="text-xs font-medium text-slate-400">
+                Synced <%= new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
+            </div>
+        </div>
     </div>
 
-    <div class="text-center mt-10">
-      <a
-        href="/"
-        class="text-white font-semibold underline text-lg hover:text-yellow-300 transition"
-      >
-        ⬅️ Back to Home
-      </a>
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fade-in-up delay-100">
+        <% weatherData.forEach((data, index) => { %>
+            <div class="glass-card p-6 rounded-3xl group relative overflow-hidden active:scale-[0.98]">
+                <!-- Card Background Decoration -->
+                <div class="absolute -bottom-10 -right-10 w-24 h-24 bg-premium-500/5 blur-2xl rounded-full group-hover:bg-premium-500/10 transition-colors"></div>
+                
+                <div class="flex items-start justify-between mb-8 relative z-10">
+                    <div>
+                        <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1"><%= data.country %></p>
+                        <h3 class="text-2xl font-outfit font-bold text-white group-hover:text-premium-400 transition-colors truncate max-w-[140px]">
+                            <%= data.city %>
+                        </h3>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-black font-outfit text-white group-hover:scale-110 transition-transform origin-right">
+                            <%= Math.round(data.temperature) %>°
+                        </p>
+                        <p class="text-[10px] text-premium-400 font-bold uppercase mt-1">Metric</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 mb-6 relative z-10 bg-slate-900/40 p-3 rounded-2xl border border-white/5">
+                    <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center">
+                        <% if (data.icon) { %>
+                            <img src="http://openweathermap.org/img/wn/<%= data.icon %>@2x.png" alt="" class="w-10 h-10 filter drop-shadow">
+                        <% } %>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-white capitalize leading-tight"><%= data.condition %></p>
+                        <div class="flex items-center gap-2 mt-0.5">
+                            <span class="text-[10px] text-slate-500 font-medium">Humidity: <%= data.humidity %>%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 relative z-10">
+                    <div class="text-left">
+                        <p class="text-[9px] text-slate-600 uppercase font-bold tracking-widest mb-1">Wind</p>
+                        <p class="text-xs font-bold text-slate-400"><%= data.windSpeed %> m/s</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[9px] text-slate-600 uppercase font-bold tracking-widest mb-1">Pressure</p>
+                        <p class="text-xs font-bold text-slate-400"><%= data.pressure %> hPa</p>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
     </div>
-  </body>
-</html>
+
+    <!-- Empty State -->
+    <% if (weatherData.length === 0) { %>
+        <div class="text-center py-20 animate-fade-in-up">
+            <div class="w-20 h-20 bg-slate-900 rounded-3xl mx-auto flex items-center justify-center mb-6">
+                <svg class="w-10 h-10 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">No Data Available</h2>
+            <p class="text-slate-500">Failed to fetch current weather conditions. Please try again.</p>
+            <button onclick="location.reload()" class="mt-8 premium-button px-8 py-3">Retry Sync</button>
+        </div>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>

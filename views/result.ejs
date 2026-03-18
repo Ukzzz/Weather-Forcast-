@@ -1,54 +1,130 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Weather in <%= city %></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body
-    class="bg-gradient-to-br from-indigo-500 via-blue-500 to-sky-400 min-h-screen flex items-center justify-center"
-  >
-    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full text-center">
-      <h1 class="text-3xl font-bold text-gray-800 mb-4">
-        🌍 Weather in <%= country %>, <%= city %>
-      </h1>
+<%- include('partials/header', { title: 'Forecast for ' + city }) %>
 
-      <% if (icon) { %>
-      <img
-        src="http://openweathermap.org/img/wn/<%= icon %>@2x.png"
-        alt="Weather Icon"
-        class="mx-auto mb-4"
-      />
-      <% } %>
+<div class="max-w-4xl mx-auto mt-6 md:mt-12 px-4">
+    <div class="glass-card p-8 md:p-12 rounded-[2.5rem] animate-fade-in-up">
+        <!-- Main Stats -->
+        <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
+            <div class="text-center md:text-left flex-1">
+                <div class="flex items-center justify-center md:justify-start gap-4 mb-2">
+                    <span class="text-xs font-bold bg-premium-500/20 text-premium-300 px-3 py-1 rounded-full uppercase tracking-tighter"><%= country %></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
+                    <span class="text-sm text-slate-400"><%= new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) %></span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-outfit font-black text-white leading-tight">
+                    <%= city %><span class="text-premium-400">.</span>
+                </h1>
+                <p class="text-2xl text-slate-400 capitalize font-medium mt-2"><%= cond %></p>
+            </div>
+            
+            <div class="flex items-center gap-6 bg-white/5 p-8 rounded-[2rem] border border-white/5 shadow-inner">
+                <div class="text-center">
+                    <p class="text-7xl md:text-8xl font-black font-outfit tracking-tighter tabular-nums">
+                        <%= Math.round(temp) %><span class="text-4xl text-premium-400 align-top mt-4 inline-block">°C</span>
+                    </p>
+                </div>
+                <% if (typeof icon !== 'undefined' && icon) { %>
+                    <img
+                        src="http://openweathermap.org/img/wn/<%= icon %>@4x.png"
+                        alt="<%= cond %>"
+                        class="w-32 h-32 md:w-40 md:h-40 filter drop-shadow-2xl animate-float"
+                    />
+                <% } %>
+            </div>
+        </div>
 
-      <div class="grid grid-cols-2 gap-4 text-left text-gray-700 font-medium">
-        <p>🌡️ Temperature:</p>
-        <p><%= temp %>°C</p>
-        <p>🌤️ Condition:</p>
-        <p><%= cond %></p>
-        <p>💧 Humidity:</p>
-        <p><%= humidity %>%</p>
-        <p>🌬️ Wind Speed:</p>
-        <p><%= windSpeed %> m/s</p>
-        <p>👁️ Visibility:</p>
-        <p><%= visibility %> m</p>
-        <p>☁️ Cloudiness:</p>
-        <p><%= cloudiness %>%</p>
-        <p>🔽 Pressure:</p>
-        <p><%= pressure %> hPa</p>
-        <p>🌅 Sunrise:</p>
-        <p><%= sunrise %></p>
-        <p>🌇 Sunset:</p>
-        <p><%= sunset %></p>
-      </div>
+        <!-- Detail Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12">
+            <div class="bg-slate-900/40 rounded-3xl p-6 border border-white/5 hover:border-premium-500/20 transition-colors group">
+                <div class="text-premium-400 mb-3 group-hover:scale-110 transition-transform origin-left">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                </div>
+                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mb-1">Humidity</p>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-2xl font-bold font-outfit"><%= humidity %></span>
+                    <span class="text-sm text-slate-500">%</span>
+                </div>
+            </div>
 
-      <a
-        href="/"
-        class="inline-block mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-      >
-        🔄 Check Another City
-      </a>
+            <div class="bg-slate-900/40 rounded-3xl p-6 border border-white/5 hover:border-indigo-500/20 transition-colors group">
+                <div class="text-indigo-400 mb-3 group-hover:scale-110 transition-transform origin-left">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </div>
+                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mb-1">Wind Speed</p>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-2xl font-bold font-outfit"><%= windSpeed %></span>
+                    <span class="text-sm text-slate-500">m/s</span>
+                </div>
+            </div>
+
+            <div class="bg-slate-900/40 rounded-3xl p-6 border border-white/5 hover:border-blue-500/20 transition-colors group">
+                <div class="text-blue-400 mb-3 group-hover:scale-110 transition-transform origin-left">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                </div>
+                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mb-1">Visibility</p>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-2xl font-bold font-outfit"><%= (visibility / 1000).toFixed(1) %></span>
+                    <span class="text-sm text-slate-500">km</span>
+                </div>
+            </div>
+
+            <div class="bg-slate-900/40 rounded-3xl p-6 border border-white/5 hover:border-amber-500/20 transition-colors group">
+                <div class="text-amber-400 mb-3 group-hover:scale-110 transition-transform origin-left">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </div>
+                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mb-1">Pressure</p>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-2xl font-bold font-outfit"><%= pressure %></span>
+                    <span class="text-sm text-slate-500">hPa</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secondary Stats -->
+        <div class="bg-white/5 rounded-[2rem] p-8 md:p-10 mb-12 border border-white/5 shadow-inner">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                <div class="flex flex-col items-center md:items-start">
+                    <p class="text-[10px] text-slate-500 uppercase font-black tracking-[0.2em] mb-3">Sunrise</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </div>
+                        <span class="text-xl font-bold font-outfit"><%= sunrise %></span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center md:items-start">
+                    <p class="text-[10px] text-slate-500 uppercase font-black tracking-[0.2em] mb-3">Sunset</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                        </div>
+                        <span class="text-xl font-bold font-outfit"><%= sunset %></span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center md:items-start">
+                    <p class="text-[10px] text-slate-500 uppercase font-black tracking-[0.2em] mb-3">Cloudiness</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center text-sky-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                        </div>
+                        <span class="text-xl font-bold font-outfit"><%= cloudiness %>%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/" class="premium-button px-10 py-5 text-lg flex items-center justify-center gap-3 active:scale-[0.98]">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                New Search
+            </a>
+            <a href="/weather/all" class="px-10 py-5 text-lg rounded-2xl border border-white/10 hover:bg-white/5 transition-all text-center font-semibold text-slate-300 active:scale-[0.98]">
+                Regional Hubs
+            </a>
+        </div>
     </div>
-  </body>
-</html>
+</div>
+
+<%- include('partials/footer') %>

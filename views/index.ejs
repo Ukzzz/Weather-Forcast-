@@ -1,70 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Weather App</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body
-    class="bg-gradient-to-r from-sky-500 to-indigo-500 min-h-screen flex flex-col items-center justify-center p-6"
-  >
-    <nav class="mb-6 flex justify-center gap-8">
-      <a
-        href="/"
-        class="text-white font-semibold underline text-lg hover:text-yellow-300 transition"
-        >⬅️ Back to Home</a
-      >
-      <a
-        href="/weather/all"
-        class="text-white font-semibold underline text-lg hover:text-yellow-300 transition"
-        >🌞 Show Weathers</a
-      >
-    </nav>
+<%- include('partials/header', { title: 'Weather Forecast | Search' }) %>
 
-    <div
-      class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md hover:scale-[1.02] transition-transform duration-300"
-    >
-      <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">
-        🌤️ Weather Forecast
-      </h1>
+<div class="max-w-xl mx-auto mt-10 md:mt-20 px-4">
+    <div class="glass-card p-10 md:p-14 rounded-[2.5rem] relative overflow-hidden animate-fade-in-up">
+        <!-- Decoration -->
+        <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+            <svg class="w-32 h-32 text-white" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 16h-8z" />
+            </svg>
+        </div>
 
-      <form action="/weather" method="POST" class="space-y-6">
-        <div>
-          <label for="country" class="block text-gray-700 font-medium mb-1"
-            >Country</label
-          >
-          <input
-            id="country"
-            name="country"
-            type="text"
-            autocomplete="off"
-            placeholder="Enter country name"
-            required
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <div class="relative z-10">
+            <div class="text-center mb-12">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-premium-500/10 text-premium-400 text-xs font-bold uppercase tracking-widest mb-4">
+                    Precision Weather
+                </span>
+                <h1 class="text-5xl md:text-6xl font-outfit font-extrabold tracking-tight text-white mb-4">
+                    Weather<span class="text-premium-400">.</span>
+                </h1>
+                <p class="text-slate-400 text-lg max-w-sm mx-auto leading-relaxed">
+                    Get hyper-local forecasts and detailed atmospheric data for any city on Earth.
+                </p>
+            </div>
+
+            <form action="/weather" method="POST" class="space-y-6">
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-500 group-focus-within:text-premium-400 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <input
+                        id="city"
+                        name="city"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="Search for a city..."
+                        required
+                        class="glass-input w-full pl-14 pr-6 py-5 text-xl font-medium placeholder:text-slate-600 shadow-inner group-hover:border-white/20 transition-all"
+                    />
+                </div>
+                
+                <button
+                    type="submit"
+                    class="premium-button w-full text-xl py-5 flex items-center justify-center gap-3 active:scale-[0.98]"
+                >
+                    <span>Fetch Forecast</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </button>
+            </form>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="mt-8 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 text-red-400 text-sm animate-shake">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <div class="mt-12 pt-8 border-t border-white/5 flex items-center justify-center gap-6">
+                <div class="flex -space-x-2">
+                    <div class="w-8 h-8 rounded-full bg-premium-500 flex items-center justify-center text-[10px] ring-2 ring-slate-950 font-bold">LDN</div>
+                    <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] ring-2 ring-slate-950 font-bold">PAR</div>
+                    <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-[10px] ring-2 ring-slate-950 font-bold">+48</div>
+                </div>
+                <p class="text-xs text-slate-500 font-medium">Monitoring 50+ European Hubs</p>
+            </div>
         </div>
-        <div>
-          <label for="city" class="block text-gray-700 font-medium mb-1"
-            >City</label
-          >
-          <input
-            id="city"
-            name="city"
-            type="text"
-            autocomplete="off"
-            placeholder="Enter city name"
-            required
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <button
-          type="submit"
-          class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          Get Weather
-        </button>
-      </form>
     </div>
-  </body>
-</html>
+</div>
+
+<%- include('partials/footer') %>

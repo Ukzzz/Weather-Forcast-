@@ -1,108 +1,52 @@
-# Weather Forecast Application
+# Weather Forecast | Premium 🌦️
 
-A full-stack web application that provides real-time weather information for cities around the world. The application fetches weather data from the OpenWeatherMap API and stores the search history in a MongoDB database.
+A modern, high-performance weather forecasting application built with Node.js, Express, and EJS. Featuring a stunning glassmorphism design and optimized service architecture.
 
-## Features
+## 🚀 Features
 
-- Real-time weather information for any city worldwide
-- Detailed weather metrics including:
-  - Current temperature
-  - Weather conditions
-  - Humidity
-  - Wind speed
-  - Visibility
-  - Cloudiness
-  - Atmospheric pressure
-  - Sunrise and sunset times
-- Search history stored in MongoDB
-- Responsive and user-friendly interface
+- **Real-time Weather**: Get accurate atmospheric data for any city worldwide using the OpenWeather API.
+- **European Regional Hubs**: A dedicated dashboard monitoring weather conditions across 50+ major cities.
+- **Premium UI**: Sophisticated glassmorphism aesthetic with micro-animations and responsive layouts.
+- **Intelligent Caching**: Optimized dashboard performance with smart data TTL management.
+- **Clean Architecture**: Modular service layer and decoupled configuration for high maintainability.
 
-## Technologies Used
+## 🛠️ Technology Stack
 
-- **Frontend**:
-  - HTML5, CSS3
-  - EJS (Embedded JavaScript) templating
-  - JavaScript (ES6+)
+- **Backend**: Node.js, Express
+- **Frontend**: EJS, Tailwind CSS, Vanilla CSS (Premium Glassmorphism)
+- **Database**: MongoDB (Mongoose)
+- **API**: OpenWeather API
 
-- **Backend**:
-  - Node.js
-  - Express.js
-  - Axios for API requests
+## 📦 Installation
 
-- **Database**:
-  - MongoDB with Mongoose ODM
-
-- **APIs**:
-  - OpenWeatherMap API
-
-## Prerequisites
-
-Before running this project, you'll need:
-
-- Node.js (v14 or higher)
-- npm (comes with Node.js)
-- MongoDB Atlas account or local MongoDB instance
-- OpenWeatherMap API key (free tier available)
-
-## Installation
-
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd MiniProj#2
-   ```
-
+1. Clone the repository
 2. Install dependencies:
    ```bash
    npm install
    ```
-
-3. Create a `.env` file in the root directory and add your environment variables:
-   ```
-   WEATHER_API_KEY=your_openweathermap_api_key
+3. Create a `.env` file with your credentials:
+   ```properties
+   WEATHER_API_KEY=your_openweather_api_key
    MONGODB_URI=your_mongodb_connection_string
    ```
-
-4. Start the development server:
+4. Start the server:
    ```bash
    npm run dev
    ```
 
-5. Open your browser and navigate to `http://localhost:3000`
+## 🏗️ Project Structure
 
-## Project Structure
-
-```
-MiniProj#2/
-├── .env                  # Environment variables
-├── .gitignore           # Git ignore file
-├── app.js               # Main application file
-├── db.js                # Database connection setup
-├── package.json         # Project dependencies
-├── README.md            # Project documentation
-├── model/
-│   └── weather.js       # Mongoose schema and model
-└── views/
-    ├── all-weather.ejs  # View for all weather searches
-    ├── index.ejs        # Homepage view
-    └── result.ejs       # Weather results view
+```text
+├── config/             # Configuration files (cities list)
+├── model/              # Mongoose schemas
+├── public/             # Static assets (CSS, images)
+├── services/           # Business logic and API services
+├── views/              # EJS templates
+│   └── partials/       # Reusable UI components
+├── app.js              # Application entry point
+├── db.js               # Database connection logic
+└── .env                # Environment variables
 ```
 
-## API Endpoints
-
-- `GET /` - Homepage with weather search form
-- `POST /weather` - Fetch and display weather for a specific city
-- `GET /weather/all` - View all previous weather searches
-
-## Environment Variables
-
-- `WEATHER_API_KEY` - Your OpenWeatherMap API key
-- `MONGODB_URI` - MongoDB connection string
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the ISC License.
+## 📄 License
+ISC

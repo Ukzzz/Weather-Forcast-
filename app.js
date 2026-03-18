@@ -1,14 +1,18 @@
 const express = require("express");
-const axios = require("axios");
-const app = express();
 const dotenv = require("dotenv");
 const connectDB = require("./db");
 const Weather = require("./model/weather");
+const weatherService = require("./services/weatherService");
+const cities = require("./config/cities.json");
 
-connectDB(); 
 dotenv.config();
+connectDB();
+
+const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
@@ -16,16 +20,17 @@ app.get("/", (req, res) => {
 });
 
 app.post("/weather", async (req, res) => {
-  const city = req.body.city;
+  const { city } = req.body;
   const apiKey = process.env.WEATHER_API_KEY;
 
-  try {
-    const result = await axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
-    );
-    const weather = result.data;
+  if (!city) {
+    return res.status(400).send("City name is required");
+  }
 
-    // Save to MongoDB
+  try {
+    const weather = await weatherService.getWeatherByCity(city, apiKey);
+
+    // Save to MongoDB asynchronously (don't block the response)
     const weatherData = new Weather({
       country: weather.sys.country,
       city: weather.name,
@@ -39,8 +44,7 @@ app.post("/weather", async (req, res) => {
       sunrise: new Date(weather.sys.sunrise * 1000),
       sunset: new Date(weather.sys.sunset * 1000),
     });
-
-    await weatherData.save();
+    weatherData.save().catch(err => console.error("Error saving weather data:", err));
 
     // Render EJS page
     res.render("result", {
@@ -59,52 +63,23 @@ app.post("/weather", async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Internal Server Error");
+    res.status(500).render("index", { error: "Could not fetch weather data. Please try again." });
   }
 });
 
 app.get("/weather/all", async (req, res) => {
   const apiKey = process.env.WEATHER_API_KEY;
-const cities = [
-  "London", "Paris", "Berlin", "Rome", "Madrid", "Amsterdam", "Warsaw", "Vienna",
-  "Lisbon", "Athens", "Zurich", "Brussels", "Prague", "Budapest", "Dublin",
-  "Oslo", "Stockholm", "Copenhagen", "Helsinki", "Barcelona", "Milan",
-  "Munich", "Frankfurt", "Hamburg", "Cologne", "Lyon", "Nice", "Edinburgh",
-  "Krakow", "Bucharest", "Sofia", "Geneva", "Bratislava", "Luxembourg", "Vilnius",
-  "Riga", "Tallinn", "Belgrade", "Zagreb", "Sarajevo", "Skopje", "Podgorica",
-  "Ljubljana", "Valletta", "Reykjavik", "Tirana", "Chisinau", "Monaco", "Andorra la Vella", "San Marino"
-];
-
 
   try {
-    const weatherData = await Promise.all(
-      cities.map(async (city) => {
-        const result = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
-        );
-        const weather = result.data;
-        return {
-          country: weather.sys.country,
-          city: weather.name,
-          temperature: weather.main.temp,
-          condition: weather.weather[0].description,
-          humidity: weather.main.humidity,
-          windSpeed: weather.wind.speed,
-          visibility: weather.visibility,
-          cloudiness: weather.clouds.all,
-          pressure: weather.main.pressure,
-        };
-      })
-    );
-
+    const weatherData = await weatherService.getEuropeDashboardWeather(cities, apiKey);
     res.render("all-weather", { weatherData });
   } catch (err) {
     console.error(err);
-    res.status(500).send("🔃Reload");
+    res.status(500).send("Error loading dashboard data.");
   }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
